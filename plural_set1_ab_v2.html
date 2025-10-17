@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Kru Pai Classroom – Plural Nouns (Set 1, A/B)</title>
+<style>
+  :root{
+    --bg:#f7fbff;
+    --brand:#1e90ff; /* ฟ้า */
+    --accent:#ffd23f; /* เหลือง */
+    --ok:#22c55e;    /* เขียวเช็กถูก */
+    --bad:#ef4444;   /* แดงผิด */
+    --ink:#0f172a;   /* สีตัวอักษร */
+    --card:#ffffff;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+    background:linear-gradient(180deg,var(--bg),#e8f2ff 70%);
+    color:var(--ink);
+  }
+  .wrap{max-width:920px;margin:0 auto;padding:20px}
+  .title{
+    display:flex; align-items:center; gap:12px; justify-content:center; flex-wrap:wrap;
+    margin-top:10px;
+  }
+  .logo{
+    width:42px;height:42px; border-radius:12px;
+    background: radial-gradient(circle at 30% 30%, var(--accent), #ffb703);
+    display:grid;place-items:center; color:#000; font-weight:800;
+    box-shadow:0 6px 16px rgba(0,0,0,.12);
+  }
+  h1{font-size:clamp(24px,4.2vw,36px); margin:6px 0 0}
+  .subtitle{font-size:14px; opacity:.8; margin-top:2px}
+  .card{
+    background:var(--card); border-radius:18px; padding:20px;
+    box-shadow:0 10px 24px rgba(30,144,255,.12);
+    margin-top:16px;
+  }
+  .row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+  label{font-weight:600}
+  input[type="text"]{
+    flex:1; min-width:220px; padding:14px 16px; border:2px solid #cfe8ff; border-radius:12px;
+    font-size:18px; outline:none;
+  }
+  input[type="text"]:focus{border-color:var(--brand)}
+  .btn{
+    background:var(--brand); color:#fff; border:none; border-radius:14px;
+    padding:14px 18px; font-size:18px; font-weight:700; cursor:pointer;
+    box-shadow:0 8px 18px rgba(30,144,255,.25); transition:.15s transform ease;
+  }
+  .btn:hover{transform:translateY(-2px)}
+  .btn.secondary{background:#1118271a;color:#0f172a}
+  .topbar{
+    display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
+    margin-bottom:12px
+  }
+  .brand{font-weight:800; letter-spacing:.2px}
+  .pill{
+    background:#fff; border:1px solid #e5eefc; border-radius:999px; padding:8px 12px;
+    display:flex; align-items:center; gap:8px; font-weight:700;
+  }
+  .progress{height:10px; background:#e9f2ff; border-radius:999px; overflow:hidden; margin:8px 0 0}
+  .bar{height:100%; width:0%; background:linear-gradient(90deg,var(--brand),#67b7ff)}
+  .timer{
+    min-width:90px; text-align:center; font-weight:800; font-size:20px; color:#0f172a;
+    background:#fff; border:2px solid #cfe8ff; border-radius:12px; padding:8px 12px;
+  }
+  .q{
+    font-size:clamp(20px,4.2vw,28px); font-weight:800; text-align:center; margin:8px 0 16px;
+  }
+  .choices{
+    display:grid; grid-template-columns:1fr; gap:12px;
+  }
+  @media (min-width:600px){ .choices{grid-template-columns:1fr 1fr} }
+  .choice{
+    background:#fff; border:2px solid #cfe8ff; border-radius:16px; padding:16px;
+    font-size:clamp(18px,3.5vw,22px); font-weight:800; text-align:center; cursor:pointer;
+    user-select:none; transition:.12s;
+  }
+  .choice:hover{border-color:var(--brand); box-shadow:0 6px 16px rgba(30,144,255,.12)}
+  .choice.bad{border-color:var(--bad); background:#fff5f5}
+  .choice.good{border-color:var(--ok); background:#f0fff6}
+  .meta{
+    display:flex;justify-content:center;gap:12px;margin-top:10px;flex-wrap:wrap;opacity:.8
+  }
+  /* เช็กถูก/กากบาทยักษ์ */
+  .mega-check, .mega-x{
+    position:fixed; inset:0; display:grid; place-items:center; pointer-events:none; z-index:50;
+    opacity:0; transform:scale(.6);
+    transition:opacity .18s ease, transform .18s ease;
+  }
+  .mega-check.show{opacity:1; transform:scale(1)}
+  .mega-x.show{opacity:1; transform:scale(1)} /* <<< เพิ่มให้กากบาทแสดง */
+  .badge{
+    width:min(58vmin,360px); height:min(58vmin,360px);
+    border-radius:50%;
+    display:grid; place-items:center; color:#fff; font-size:min(18vmin,120px); font-weight:900;
+    background:radial-gradient(circle at 30% 30%, #34d399, var(--ok));
+    box-shadow:0 18px 80px rgba(34,197,94,.55), inset 0 0 30px rgba(255,255,255,.25);
+    border:8px solid #ffffffaa;
+  }
+  .mega-x .badge{
+    background:radial-gradient(circle at 30% 30%, #ff7b7b, var(--bad));
+    box-shadow:0 18px 80px rgba(239,68,68,.55), inset 0 0 30px rgba(255,255,255,.25);
+  }
+  /* เอฟเฟกต์สั่นตอนผิด */
+  @keyframes shake {
+    10%, 90% { transform: translateX(-2px); }
+    20%, 80% { transform: translateX(3px); }
+    30%, 50%, 70% { transform: translateX(-4px); }
+    40%, 60% { transform: translateX(4px); }
+  }
+  .choice.bad { animation: shake .35s linear; }
+  /* สรุปผล */
+  .score{
+    font-size:clamp(24px,5vw,40px); font-weight:900; text-align:center; margin:10px 0 4px
+  }
+  .score-sub{ text-align:center; opacity:.85; margin-bottom:16px}
+  .grid-2{display:grid; grid-template-columns:1fr; gap:12px}
+  @media (min-width:640px){ .grid-2{grid-template-columns:1fr 1fr} }
+  .stat{
+    background:#fff; border:2px solid #cfe8ff; border-radius:14px; padding:12px;
+    display:grid; gap:6px; text-align:center
+  }
+  .stat .big{font-size:28px; font-weight:900}
+  .watermark{
+    position:fixed; bottom:10px; right:12px; font-size:12px; opacity:.55; font-weight:700
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <!-- หัวเรื่อง + โลโก้ -->
+  <div class="title">
+    <div class="logo">KP</div>
+    <div>
+      <h1>Plural Nouns – ชุดที่ 1 (A/B)</h1>
+      <div class="subtitle">Kru Pai Classroom • แบบเลือกตอบ 2 ตัวเลือก • จับเวลา 15 วินาที/ข้อ</div>
+    </div>
+  </div>
+
+  <!-- หน้าเริ่มเกม -->
+  <section id="screen-start" class="card">
+    <div class="row">
+      <label for="player">ใส่ชื่อผู้เล่น</label>
+      <input id="player" type="text" placeholder="เช่น Ploy, Mint, Boss" />
+      <button class="btn" id="btnStart">Start ▶</button>
+    </div>
+    <div style="margin-top:14px; font-size:14px; opacity:.8">
+      เคล็ดลับ: เลือกรูปพหูพจน์ที่ถูกต้องให้ทันเวลา หากหมดเวลา = นับผิดนะจ๊ะ ✨
+    </div>
+  </section>
+
+  <!-- เกม -->
+  <section id="screen-game" class="card" style="display:none">
+    <div class="topbar">
+      <div class="pill brand">Kru Pai Classroom</div>
+      <div class="pill">ผู้เล่น: <span id="who">-</span></div>
+      <div class="timer"><span id="time">15</span>s</div>
+    </div>
+    <div class="pill" style="justify-content:space-between">
+      <div>ข้อที่ <b id="idx">1</b>/50</div>
+      <div style="min-width:140px">คะแนน: <b id="score">0</b></div>
+    </div>
+    <div class="progress"><div id="bar" class="bar"></div></div>
+
+    <div class="q" id="qtext">เลือกพหูพจน์ของ <span id="singular">dog</span></div>
+
+    <div class="choices">
+      <div class="choice" id="choiceA">A) dogs</div>
+      <div class="choice" id="choiceB">B) doges</div>
+    </div>
+
+    <div class="meta">
+      <div>เวลาต่อข้อ 15 วิ</div>
+      <div>ตอบถูก = ได้ 1 คะแนน</div>
+    </div>
+  </section>
+
+  <!-- หน้าสรุป -->
+  <section id="screen-end" class="card" style="display:none">
+    <div class="score">สรุปคะแนนของ <span id="nameEnd">-</span></div>
+    <div class="score-sub">Plural Nouns – ชุดที่ 1 (A/B)</div>
+
+    <div class="grid-2">
+      <div class="stat">
+        <div>คะแนนรวม</div>
+        <div class="big" id="finalScore">0 / 50</div>
+      </div>
+      <div class="stat">
+        <div>คิดเป็นร้อยละ</div>
+        <div class="big" id="finalPct">0%</div>
+      </div>
+    </div>
+
+    <div style="text-align:center; margin-top:14px; font-weight:700" id="msg"></div>
+    <div style="display:flex; gap:8px; justify-content:center; margin-top:14px">
+      <button class="btn" id="btnRestart">กลับไปหน้าแรก</button>
+    </div>
+  </section>
+</div>
+
+<!-- เช็กถูก/กากบาทยักษ์ -->
+<div class="mega-check" id="checkFx"><div class="badge">✓</div></div>
+<div class="mega-x" id="xFx"><div class="badge">✕</div></div>
+
+<div class="watermark">© Kru Pai Classroom</div>
+
+<script>
+/* ---------- ชุดคำถาม 50 ข้อ (A/B) ---------- */
+const QUESTIONS = [
+  ["dog","dogs","doges"],
+  ["cat","cats","cates"],
+  ["book","books","bookes"],
+  ["bus","buses","buss"],
+  ["box","boxes","boxs"],
+  ["dish","dishes","dishs"],
+  ["fox","foxes","foxs"],
+  ["baby","babies","babys"],
+  ["lady","ladies","ladys"],
+  ["city","cities","citys"],
+  ["story","stories","storys"],
+  ["knife","knives","knifes"],
+  ["leaf","leaves","leafs"],
+  ["wolf","wolves","wolfs"],
+  ["life","lives","lifes"],
+  ["shelf","shelves","shelfs"],
+  ["man","men","mans"],
+  ["woman","women","womans"],
+  ["child","children","childs"],
+  ["tooth","teeth","tooths"],
+  ["foot","feet","foots"],
+  ["mouse","mice","mouses"],
+  ["person","people","persons"],
+  ["ox","oxen","oxes"],
+  ["hero","heroes","heros"],
+  ["potato","potatoes","potatos"],
+  ["tomato","tomatoes","tomatos"],
+  ["church","churches","churchs"],
+  ["bench","benches","benchs"],
+  ["brush","brushes","brushs"],
+  ["penny","pennies","pennys"],
+  ["party","parties","partys"],
+  ["cherry","cherries","cherrys"],
+  ["butterfly","butterflies","butterflys"],
+  ["toy","toys","toies"],
+  ["boy","boys","boies"],
+  ["day","days","dayes"],
+  ["tree","trees","treees"],
+  ["flower","flowers","flowrs"],
+  ["bird","birds","birdes"],
+  ["sheep","sheep","sheeps"],
+  ["deer","deer","deers"],
+  ["fish","fish","fishes"],
+  ["salmon","salmon","salmons"],
+  ["moose","moose","mooses"],
+  ["aircraft","aircraft","aircrafts"],
+  ["series","series","serieses"],
+  ["species","species","speciess"],
+  ["bison","bison","bisons"],
+  ["shrimp","shrimp","shrimps"]
+];
+
+/* ---------- อีลิเมนต์ ---------- */
+const elStart  = document.getElementById('screen-start');
+const elGame   = document.getElementById('screen-game');
+const elEnd    = document.getElementById('screen-end');
+const who      = document.getElementById('who');
+const nameEnd  = document.getElementById('nameEnd');
+const playerIn = document.getElementById('player');
+const btnStart = document.getElementById('btnStart');
+const btnRestart = document.getElementById('btnRestart');
+
+const qSing    = document.getElementById('singular');
+const qtext    = document.getElementById('qtext');
+let choiceA  = document.getElementById('choiceA');
+let choiceB  = document.getElementById('choiceB');
+const idxEl    = document.getElementById('idx');
+const scoreEl  = document.getElementById('score');
+const timeEl   = document.getElementById('time');
+const barEl    = document.getElementById('bar');
+
+const fxCheck  = document.getElementById('checkFx');
+const fxX      = document.getElementById('xFx');
+const finalScore = document.getElementById('finalScore');
+const finalPct   = document.getElementById('finalPct');
+const msg        = document.getElementById('msg');
+
+/* ---------- สถานะเกม ---------- */
+let order = [];       // ลำดับสุ่มข้อ
+let i = 0;            // ดัชนีข้อ
+let score = 0;
+let playerName = "";
+let timer = null;
+const TIME_LIMIT = 15;
+
+/* ---------- เครื่องมือ ---------- */
+const shuffle = arr => arr.map(v=>[Math.random(),v])
+                          .sort((a,b)=>a[0]-b[0])
+                          .map(x=>x[1]);
+
+function show(el){ el.style.display='block' }
+function hide(el){ el.style.display='none' }
+
+function flash(el){
+  el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'), 600);
+}
+
+function startTimer(){
+  let t = TIME_LIMIT;
+  timeEl.textContent = t;
+  barEl.style.width = "0%";
+  const total = TIME_LIMIT;
+  timer = setInterval(()=>{
+    t--;
+    timeEl.textContent = t;
+    const used = (total - t) / total * 100;
+    barEl.style.width = used + "%";
+    if(t<=0){
+      clearInterval(timer);
+      flash(fxX); // หมดเวลา = ผิด
+      nextQuestion();
+    }
+  }, 1000);
+}
+
+function stopTimer(){
+  if(timer){ clearInterval(timer); timer = null; }
+}
+
+/* ---------- เริ่มเกม ---------- */
+btnStart.addEventListener('click', ()=>{
+  playerName = (playerIn.value || "").trim() || "Player";
+  who.textContent = playerName;
+  hide(elStart); show(elGame);
+  setup();
+  render();
+});
+
+playerIn.addEventListener('keydown', e=>{
+  if(e.key === 'Enter'){ btnStart.click(); }
+});
+
+btnRestart.addEventListener('click', ()=>{
+  hide(elEnd); show(elStart);
+  // รอเริ่มใหม่
+});
+
+/* ---------- ตั้งค่า ---------- */
+function setup(){
+  score = 0; i = 0;
+  order = shuffle([...Array(QUESTIONS.length).keys()]);
+  scoreEl.textContent = score;
+}
+
+/* ---------- แสดงข้อ ---------- */
+function render(){
+  if(i >= order.length){ return finish(); }
+  const qIndex = order[i];
+  const [singular, correct, wrong] = QUESTIONS[qIndex];
+
+  idxEl.textContent = (i+1);
+  qSing.textContent = singular;
+
+  // สุ่มว่าวางคำตอบถูกที่ A หรือ B
+  const pair = shuffle([ {label:'A',text:correct, correctness:true},
+                         {label:'B',text:wrong,    correctness:false} ]);
+
+  // รีเฟรชปุ่มเพื่อล้าง event handler เก่า
+  choiceA.replaceWith(choiceA.cloneNode(true));
+  choiceB.replaceWith(choiceB.cloneNode(true));
+  choiceA = document.getElementById('choiceA');
+  choiceB = document.getElementById('choiceB');
+  [choiceA, choiceB].forEach(btn=>btn.className='choice');
+
+  choiceA.textContent = `A) ${pair[0].text}`;
+  choiceB.textContent = `B) ${pair[1].text}`;
+
+  choiceA.onclick = ()=> check(pair[0].correctness, choiceA);
+  choiceB.onclick = ()=> check(pair[1].correctness, choiceB);
+
+  stopTimer();
+  startTimer();
+}
+
+/* ---------- ตรวจคำตอบ ---------- */
+function check(isCorrect, btnEl){
+  stopTimer();
+  if(isCorrect){
+    score++; scoreEl.textContent = score;
+    btnEl.classList.add('good');
+    flash(fxCheck); // เช็กถูกยักษ์
+  }else{
+    btnEl.classList.add('bad');
+    flash(fxX);     // กากบาทยักษ์
+  }
+  setTimeout(nextQuestion, 420);
+}
+
+function nextQuestion(){
+  i++;
+  if(i < order.length){ render(); }
+  else{ finish(); }
+}
+
+/* ---------- จบเกม ---------- */
+function finish(){
+  stopTimer();
+  hide(elGame); show(elEnd);
+  nameEnd.textContent = playerName;
+  finalScore.textContent = `${score} / ${QUESTIONS.length}`;
+  const pct = Math.round(score / QUESTIONS.length * 100);
+  finalPct.textContent = `${pct}%`;
+  msg.textContent = pct >= 80
+    ? "ยอดเยี่ยมมาก! เก่งมาก ๆ เลย 🌟"
+    : "สู้ต่ออีกนิด ใกล้แล้วนะคนเก่ง 😊";
+}
+</script>
+</body>
+</html>
